@@ -1,0 +1,7 @@
+*~
+*.swp
+*.py[co]
+Pipfile.lock
+build
+dist
+*.egg-info

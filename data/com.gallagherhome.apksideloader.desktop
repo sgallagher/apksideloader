@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.1
+Type=Application
+Name=APK Sideloader
+Icon=android_icon
+Exec=apksideloader %F
+Comment=Sideload an Android app
+Categories=Utilities
+Terminal=false
