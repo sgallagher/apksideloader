@@ -4,6 +4,8 @@ import logging
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk  # noqa
 
+logger = logging.getLogger(__name__)
+
 
 class ApkStatus:
 
@@ -14,9 +16,11 @@ class ApkStatus:
         self.info_label = Gtk.Label()
 
     def update_progress(self, filename, bytes_written, total_bytes):
+        del filename
+
         if total_bytes > 0:
             self.progress.set_fraction(float(bytes_written) / float(total_bytes))
-            logging.debug("{} / {} = {}".format(bytes_written, total_bytes, self.progress.get_fraction()))
+            logger.debug("{} / {} = {}".format(bytes_written, total_bytes, self.progress.get_fraction()))
         else:
             self.progress.pulse()
 

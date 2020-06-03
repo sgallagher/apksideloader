@@ -64,8 +64,10 @@ def worker(conn, apks):
 def main(debug, adb_server, adb_port, authkey, apk):
 
     if debug:
-        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
-        logging.debug("Debugging mode enabled")
+        logging.basicConfig(format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
+        logger = logging.getLogger('apksideloader')
+        logger.setLevel(logging.DEBUG)
+        logger.debug("Debugging mode enabled")
     else:
         logging.basicConfig()
 
@@ -76,9 +78,7 @@ def main(debug, adb_server, adb_port, authkey, apk):
     apks = queue.Queue()
     for counter, pkg in enumerate(apk):
         apk = ApkStatus(pkg)
-
         win.add_apk(apk)
-
         apks.put(apk)
 
     win.show_all()

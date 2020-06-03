@@ -53,9 +53,9 @@ class AdbConnection:
 
         # Copy the APK to the target
         dst_filename = ''.join(random.choice(string.ascii_lowercase) for i in range(16)) + '.apk'
-        logger.info("dst_filename: {}".format(dst_filename))
 
         dst_path = os.path.join(AdbConnection.TMP_PATH, dst_filename)
+        logger.debug("dst_path: {}".format(dst_path))
         self.device.push(apk.src_path, dst_path, total_timeout_s=10.0, progress_callback=apk.update_progress)
         apk.progress.set_fraction(1.0)
 
