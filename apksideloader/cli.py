@@ -29,7 +29,7 @@ def fail_apks(apks, message):
         apks.task_done()
 
 
-def worker(conn, apks):
+def do_installs(conn, apks):
     # Connect to ADB Server
     try:
         conn.connect()
@@ -50,6 +50,11 @@ def worker(conn, apks):
             fail_apks(apks, e)
 
         apks.task_done()
+
+
+def worker(win, conn, apks):
+    do_installs(conn, apks)
+    win.enable_done_button()
 
 
 @click.command()
@@ -83,7 +88,7 @@ def main(debug, adb_server, adb_port, authkey, apk):
 
     win.show_all()
 
-    worker_thread = threading.Thread(target=worker, daemon=True, args=(conn, apks)).start()
+    worker_thread = threading.Thread(target=worker, daemon=True, args=(win, conn, apks)).start()
 
     Gtk.main()
 

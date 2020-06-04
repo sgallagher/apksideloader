@@ -41,6 +41,15 @@ class MainWindow(Gtk.Window):
                                  width=1,
                                  height=1)
 
+        self.done_button = Gtk.Button.new_with_mnemonic("_Done")
+        self.done_button.connect("clicked", self.on_done_clicked)
+        self.done_button.set_sensitive(False)
+        self.grid.attach_next_to(child=self.done_button,
+                                 sibling=self.header_info,
+                                 side=Gtk.PositionType.RIGHT,
+                                 width=1,
+                                 height=1)
+
         self.connect("destroy", Gtk.main_quit)
 
         # Start the APK index count at 1 so we don't overwrite the header
@@ -67,3 +76,11 @@ class MainWindow(Gtk.Window):
                                  side=Gtk.PositionType.RIGHT,
                                  width=1,
                                  height=1)
+
+    def enable_done_button(self):
+        self.done_button.set_sensitive(True)
+
+    @staticmethod
+    def on_done_clicked(button):
+        del button
+        Gtk.main_quit()
