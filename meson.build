@@ -16,10 +16,11 @@ configure_file(
     input: 'data/com.gallagherhome.apksideloader.desktop.in',
     output: 'com.gallagherhome.apksideloader.desktop',
     configuration: desktop_cdata,
-    install_dir: join_paths(get_option('datadir'), 'applications'),
+    install_dir: join_paths(py.get_install_dir(), 'share/applications'),
 )
 
-install_data(files('data/icons/hicolor/192x192/android_icon.png'), install_dir: 'share/icons/hicolor/192x192')
+install_data(files('data/icons/hicolor/192x192/android_icon.png'),
+             install_dir: join_paths(py.get_install_dir(), 'share/icons/hicolor/192x192'))
 
 apksideloader_py_files = files(
     'apksideloader/__init__.py',
@@ -29,4 +30,4 @@ apksideloader_py_files = files(
     'apksideloader/gui.py',
 )
 
-py.install_sources(apksideloader_py_files, subdir: 'apksideloader')
+py.install_sources(apksideloader_py_files, subdir: 'apksideloader', pure: true)
