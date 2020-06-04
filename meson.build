@@ -19,6 +19,8 @@ configure_file(
     install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
+install_data(files('data/icons/hicolor/192x192/android_icon.png'), install_dir: 'share/icons/hicolor/192x192')
+
 apksideloader_py_files = files(
     'apksideloader/__init__.py',
     'apksideloader/adb.py',
