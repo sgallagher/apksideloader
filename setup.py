@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="apksideloader",
-    version="0.1",
+    version="0.2",
     license="GPLv3+",
     description="A tool to sideload Android packages onto Chromebooks",
     keywords="android apk sideload",
@@ -44,4 +44,8 @@ setup(
             "apksideloader = apksideloader.cli:main",
         ],
     },
+    data_files=[
+        ('share/applications', ['data/com.gallagherhome.apksideloader.desktop']),
+        ('share/icons', ['data/icons/hicolor/192x192/android_icon.png']),
+    ],
 )
