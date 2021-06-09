@@ -76,6 +76,7 @@ class MainWindow(Gtk.Window):
                                  side=Gtk.PositionType.RIGHT,
                                  width=1,
                                  height=1)
+        self.apk_index += 1
 
     def enable_done_button(self):
         self.done_button.set_sensitive(True)
