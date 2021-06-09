@@ -35,9 +35,9 @@ class AdbConnection:
 
         try:
             if self.signer:
-                self.device.connect(rsa_keys=[self.signer], timeout_s=10.0)
+                self.device.connect(rsa_keys=[self.signer])
             else:
-                self.device.connect(timeout_s=10.0)
+                self.device.connect()
 
         except OSError as e:
             logger.error("OSError: {}".format(e))
@@ -56,14 +56,13 @@ class AdbConnection:
 
         dst_path = os.path.join(AdbConnection.TMP_PATH, dst_filename)
         logger.debug("dst_path: {}".format(dst_path))
-        self.device.push(apk.src_path, dst_path, total_timeout_s=10.0, progress_callback=apk.update_progress)
-        apk.progress.set_fraction(1.0)
+        self.device.push(apk.src_path, dst_path, progress_callback=apk.update_progress)
 
         apk.info('Installing...')
 
         # Install the APK on the target
         try:
-            output = self.device.shell('pm install -r {}'.format(dst_path))
+            output = self.device.shell('pm install -r {}'.format(dst_path), read_timeout_s=300.0)
         except Exception as e:
             logger.error("Installation failed: {}".format(e))
             raise
