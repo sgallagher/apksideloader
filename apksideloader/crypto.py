@@ -26,11 +26,12 @@ def validate_privkey(path=pathlib.Path.home() / ".android"):
     # Attempt to load the existing keys
     try:
         with privkey_path.open("rb") as pem_in:
-            serialization.load_pem_private_key(pem_in.read(), None, default_backend())
+            keydata = pem_in.read()
+        serialization.load_pem_private_key(keydata, None, default_backend())
     except ValueError as e:
         raise KeyValidationError("Invalid private key: {}".format(privkey_path)) from e
 
-    return privkey_path
+    return keydata
 
 
 def generate_keypair(path=pathlib.Path.home() / ".android"):
@@ -63,4 +64,4 @@ def generate_keypair(path=pathlib.Path.home() / ".android"):
         pem_out.write(public_key)
     os.umask(old_umask)
 
-    return path / "adbkey"
+    return private_key
