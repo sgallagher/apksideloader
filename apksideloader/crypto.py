@@ -48,7 +48,7 @@ def generate_keypair(path=pathlib.Path.home() / ".android"):
     # get private key in PEM container format
     private_key = key.private_bytes(
         encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.TraditionalOpenSSL,
+        format=serialization.PrivateFormat.PKCS8,
         encryption_algorithm=serialization.NoEncryption(),
     )
 
