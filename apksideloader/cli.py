@@ -82,7 +82,7 @@ def main(debug, adb_server, adb_port, apk):
     except MissingAdbKeysError:
         keypath = generate_keypair()
 
-    conn = AdbConnection(server=adb_server, port=adb_port, signer=CryptographySigner(keypath))
+    conn = AdbConnection(server=adb_server, port=adb_port, signer=CryptographySigner(str(keypath)))
 
     apks = queue.Queue()
     for counter, pkg in enumerate(apk):
