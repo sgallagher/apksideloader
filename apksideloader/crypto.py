@@ -1,6 +1,7 @@
 import os
 import pathlib
 
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
@@ -21,18 +22,18 @@ def validate_keypair(path=pathlib.Path.home() / ".android"):
         privkey_path = (path / "adbkey").resolve(strict=True)
         pubkey_path = (path / "adbkey.pub").resolve(strict=True)
     except FileNotFoundError:
-        raise MissingAdbKeys("Missing keys")
+        raise MissingAdbKeysError("Missing keys")
 
     # Attempt to load the existing keys
     try:
         with privkey_path.open("rb") as pem_in:
-            serialization.load_pem_private_key(pem_in.read(), None)
+            serialization.load_pem_private_key(pem_in.read(), None, default_backend())
     except ValueError as e:
         raise KeyValidationError("Invalid private key: {}".format(privkey_path)) from e
 
     try:
         with pubkey_path.open("rb") as pem_in:
-            serialization.load_pem_public_key(pem_in.read(), None)
+            serialization.load_pem_public_key(pem_in.read(), default_backend())
     except ValueError as e:
         raise KeyValidationError("Invalid public key: {}".format(pubkey_path)) from e
 
@@ -41,7 +42,7 @@ def generate_keypair(path=pathlib.Path.home() / ".android"):
     path = pathlib.Path(path)
 
     # generate private/public key pair
-    key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    key = rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
 
     # get public key in OpenSSH format
     public_key = key.public_key().public_bytes(
