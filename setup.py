@@ -39,7 +39,7 @@ setup(
         "PyGObject~=3.40.1",
         "click~=8.0.1",
         "apksideloader~=0.2",
-        "cryptography~=3.4.7",
+        "cryptography",
     ],
     entry_points={
         "console_scripts": [
