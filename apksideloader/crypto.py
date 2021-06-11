@@ -42,7 +42,7 @@ def generate_keypair(path=pathlib.Path.home() / ".android"):
 
     # get public key in OpenSSH format
     public_key = key.public_key().public_bytes(
-        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+        serialization.Encoding.OpenSSH, serialization.PublicFormat.OpenSSH
     )
 
     # get private key in PEM container format
