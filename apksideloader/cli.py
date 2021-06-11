@@ -64,7 +64,7 @@ def worker(win, conn, apks):
 @click.option('-s', '--adb-server', type=str, default=CROSTINI_DEFAULT_ADB_SERVER, show_default=True)
 @click.option('-p', '--adb-port', type=int, default=CROSTINI_DEFAULT_ADB_PORT, show_default=True)
 @click.argument('apk', type=click.Path(exists=True), nargs=-1)
-def main(debug, adb_server, adb_port, authkey, apk):
+def main(debug, adb_server, adb_port, apk):
 
     if debug:
         logging.basicConfig(format="%(asctime)s:%(levelname)s:%(name)s:%(message)s")
