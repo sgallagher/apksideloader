@@ -1,7 +1,6 @@
 import click
 import gi
 import logging
-import os
 import queue
 import threading
 
@@ -13,6 +12,9 @@ from apksideloader.adb import AdbConnection, AdbConnectionError
 from apksideloader.apk import ApkStatus
 
 from apksideloader.gui import MainWindow
+
+from apksideloader.crypto import validate_keypair, generate_keypair
+from apksideloader.crypto import MissingAdbKeysError
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk  # noqa
@@ -61,10 +63,6 @@ def worker(win, conn, apks):
 @click.option('-d', '--debug/--no-debug', default=False)
 @click.option('-s', '--adb-server', type=str, default=CROSTINI_DEFAULT_ADB_SERVER, show_default=True)
 @click.option('-p', '--adb-port', type=int, default=CROSTINI_DEFAULT_ADB_PORT, show_default=True)
-@click.option('-k', '--authkey',
-              type=click.File('rb'),
-              default=lambda: '{}/.android/adbkey'.format(os.environ.get('HOME', None)),
-              show_default='$HOME/.android/adbkey')
 @click.argument('apk', type=click.Path(exists=True), nargs=-1)
 def main(debug, adb_server, adb_port, authkey, apk):
 
@@ -77,6 +75,12 @@ def main(debug, adb_server, adb_port, authkey, apk):
         logging.basicConfig()
 
     win = MainWindow()
+
+    # First, ensure we have valid public and private keys.
+    try:
+        validate_keypair()
+    except MissingAdbKeysError:
+        generate_keypair()
 
     conn = AdbConnection(server=adb_server, port=adb_port, signer=PythonRSASigner('', authkey.read()))
 

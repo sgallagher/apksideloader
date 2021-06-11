@@ -35,9 +35,11 @@ setup(
     packages=["apksideloader"],
     include_package_data=True,
     install_requires=[
-        "Click>=7.0.0",
-        "adb-shell",
-        "PyGObject>=3.30.4",
+        "setuptools~=49.6.0",
+        "PyGObject~=3.40.1",
+        "click~=8.0.1",
+        "apksideloader~=0.2",
+        "cryptography~=3.4.7",
     ],
     entry_points={
         "console_scripts": [
