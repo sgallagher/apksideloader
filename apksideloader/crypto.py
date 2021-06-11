@@ -14,13 +14,12 @@ class KeyValidationError(Exception):
     pass
 
 
-def validate_keypair(path=pathlib.Path.home() / ".android"):
+def validate_privkey(path=pathlib.Path.home() / ".android"):
     path = pathlib.Path(path)
 
-    # First, just test that they exist at all
+    # First, just test that it exists at all
     try:
         privkey_path = (path / "adbkey").resolve(strict=True)
-        pubkey_path = (path / "adbkey.pub").resolve(strict=True)
     except FileNotFoundError:
         raise MissingAdbKeysError("Missing keys")
 
@@ -31,11 +30,7 @@ def validate_keypair(path=pathlib.Path.home() / ".android"):
     except ValueError as e:
         raise KeyValidationError("Invalid private key: {}".format(privkey_path)) from e
 
-    try:
-        with pubkey_path.open("rb") as pem_in:
-            serialization.load_pem_public_key(pem_in.read(), default_backend())
-    except ValueError as e:
-        raise KeyValidationError("Invalid public key: {}".format(pubkey_path)) from e
+    return privkey_path
 
 
 def generate_keypair(path=pathlib.Path.home() / ".android"):
@@ -67,3 +62,5 @@ def generate_keypair(path=pathlib.Path.home() / ".android"):
     with (path / "adbkey.pub").open("wb") as pem_out:
         pem_out.write(public_key)
     os.umask(old_umask)
+
+    return path / "adbkey"

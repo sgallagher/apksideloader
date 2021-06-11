@@ -4,7 +4,7 @@ import logging
 import queue
 import threading
 
-from adb_shell.auth.sign_pythonrsa import PythonRSASigner
+from adb_shell.auth.sign_cryptography import CryptographySigner
 
 from apksideloader.adb import CROSTINI_DEFAULT_ADB_SERVER, CROSTINI_DEFAULT_ADB_PORT
 from apksideloader.adb import AdbConnection, AdbConnectionError
@@ -13,7 +13,7 @@ from apksideloader.apk import ApkStatus
 
 from apksideloader.gui import MainWindow
 
-from apksideloader.crypto import validate_keypair, generate_keypair
+from apksideloader.crypto import validate_privkey, generate_keypair
 from apksideloader.crypto import MissingAdbKeysError
 
 gi.require_version("Gtk", "3.0")
@@ -78,11 +78,11 @@ def main(debug, adb_server, adb_port, apk):
 
     # First, ensure we have valid public and private keys.
     try:
-        validate_keypair()
+        keypath = validate_privkey()
     except MissingAdbKeysError:
-        generate_keypair()
+        keypath = generate_keypair()
 
-    conn = AdbConnection(server=adb_server, port=adb_port, signer=PythonRSASigner('', authkey.read()))
+    conn = AdbConnection(server=adb_server, port=adb_port, signer=CryptographySigner(keypath))
 
     apks = queue.Queue()
     for counter, pkg in enumerate(apk):
