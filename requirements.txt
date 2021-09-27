@@ -3,3 +3,4 @@ PyGObject~=3.40.1
 click~=8.0.1
 apksideloader~=0.2
 cryptography
+adb_shell~=0.4.0
